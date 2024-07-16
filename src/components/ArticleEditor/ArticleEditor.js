@@ -57,7 +57,7 @@ const ArticleEditor = () => {
   };
 
   const handleSave = () => {
-    axios.post('http://localhost:3001/save-data', { editorHtml })
+    axios.post('/save-data', { editorHtml })
       .then(response => {
         alert('Data saved and pushed to GitLab');
       })
