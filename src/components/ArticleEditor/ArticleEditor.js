@@ -57,12 +57,18 @@ const ArticleEditor = () => {
   };
 
   const handleSave = () => {
-    axios.post('/save-data', { editorHtml })
+    const payload = {
+      editorHtml: editorHtml
+    };
+    console.log('Sending data:', payload);
+    
+    axios.post('/save-data', { data: JSON.stringify(payload) })
       .then(response => {
         alert('Data saved and pushed to GitLab');
       })
       .catch(error => {
         console.error('There was an error!', error);
+        alert('There was an error: ' + error.message);
       });
   };
 
