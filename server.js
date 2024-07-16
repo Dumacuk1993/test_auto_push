@@ -31,11 +31,11 @@ app.post('/save-data', (req, res) => {
     }
   }
 
-  // Запись содержимого editorHtml в файл
-  fs.writeFile('data.txt', data.editorHtml, (err) => {
+  // Добавление содержимого editorHtml в файл
+  fs.appendFile('data.txt', data.editorHtml + '\n', (err) => {
     if (err) {
-      console.error('Error writing to file', err);
-      return res.status(500).send('Error writing to file');
+      console.error('Error appending to file', err);
+      return res.status(500).send('Error appending to file');
     }
 
     git.add('./*')
