@@ -12,8 +12,6 @@ app.use(bodyParser.json());
 app.post('/save-data', (req, res) => {
   const { editorHtml } = req.body;
 
-  console.log('Received editorHtml:', editorHtml);
-
   if (!editorHtml) {
     console.error('editorHtml is missing');
     return res.status(400).send('editorHtml is missing');
@@ -30,7 +28,6 @@ app.post('/save-data', (req, res) => {
     let currentData = [];
     if (fileContent) {
       try {
-        // Извлечение содержимого массива из файла data.js
         const match = fileContent.match(/const dataNews = (\[.*\]);/s);
         if (match && match[1]) {
           currentData = JSON.parse(match[1]);
@@ -41,10 +38,8 @@ app.post('/save-data', (req, res) => {
       }
     }
 
-    // Добавление новых данных в массив
     currentData.push(editorHtml);
 
-    // Запись обновленного массива в файл data.js
     const newData = `const dataNews = ${JSON.stringify(currentData, null, 2)};
     
     export default dataNews;`;
