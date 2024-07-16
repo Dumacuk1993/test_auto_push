@@ -1,0 +1,14 @@
+.article {
+    width: 700px;
+    margin: 0 auto;
+    padding-top: 32px;
+}
+.article img {
+    display: block;
+    width: 700px;
+    height: auto;
+}
+.article p {
+    font-size: 24px;
+    color: #000;
+}
