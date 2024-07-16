@@ -32,7 +32,7 @@ app.post('/save-data', (req, res) => {
   }
 
   // Добавление содержимого editorHtml в файл
-  fs.appendFile('data.txt', data.editorHtml + '\n', (err) => {
+  fs.appendFile('data.txt', data.editorHtml + 'какой то текст', (err) => {
     if (err) {
       console.error('Error appending to file', err);
       return res.status(500).send('Error appending to file');
