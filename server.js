@@ -7,49 +7,61 @@ const simpleGit = require('simple-git');
 const app = express();
 const git = simpleGit();
 
-// Middleware для парсинга JSON
 app.use(bodyParser.json());
 
 app.post('/save-data', (req, res) => {
-  let data = req.body.data;
+  const { editorHtml } = req.body;
 
-  // Логирование данных для отладки
-  console.log('Received data:', data);
+  console.log('Received editorHtml:', editorHtml);
 
-  // Проверка на undefined
-  if (data === undefined) {
-    console.error('Data is undefined');
-    return res.status(400).send('Data is undefined');
+  if (!editorHtml) {
+    console.error('editorHtml is missing');
+    return res.status(400).send('editorHtml is missing');
   }
 
-  // Проверка типа данных и преобразование из JSON-строки
-  if (typeof data === 'string') {
-    try {
-      data = JSON.parse(data);
-    } catch (err) {
-      console.error('Invalid JSON string');
-      return res.status(400).send('Invalid JSON string');
-    }
-  }
-
-  // Построение пути к файлу data.txt в папке src
   const filePath = path.join(__dirname, 'src', 'data.js');
 
-  // Добавление содержимого editorHtml в файл
-  fs.appendFile(filePath, data.editorHtml + '\n', (err) => {
-    if (err) {
-      console.error('Error appending to file', err);
-      return res.status(500).send('Error appending to file');
+  fs.readFile(filePath, 'utf8', (err, fileContent) => {
+    if (err && err.code !== 'ENOENT') {
+      console.error('Error reading file', err);
+      return res.status(500).send('Error reading file');
     }
 
-    git.add('./*')
-      .then(() => git.commit('Auto-commit'))
-      .then(() => git.push('origin', 'main'))
-      .then(() => res.send('Data saved and pushed to GitLab'))
-      .catch((err) => {
-        console.error('Error with git operations', err);
-        res.status(500).send('Error with git operations: ' + err);
-      });
+    let currentData = [];
+    if (fileContent) {
+      try {
+        // Извлечение содержимого массива из файла data.js
+        const match = fileContent.match(/const dataArray = (\[.*\]);/s);
+        if (match && match[1]) {
+          currentData = JSON.parse(match[1]);
+        }
+      } catch (err) {
+        console.error('Error parsing file content', err);
+        return res.status(500).send('Error parsing file content');
+      }
+    }
+
+    // Добавление новых данных в массив
+    currentData.push(editorHtml);
+
+    // Запись обновленного массива в файл data.js
+    const newData = `const dataArray = ${JSON.stringify(currentData, null, 2)};`;
+
+    fs.writeFile(filePath, newData, (err) => {
+      if (err) {
+        console.error('Error writing to file', err);
+        return res.status(500).send('Error writing to file');
+      }
+
+      git.add('./*')
+        .then(() => git.commit('Auto-commit'))
+        .then(() => git.push('origin', 'main'))
+        .then(() => res.send('Data saved and pushed to GitLab'))
+        .catch((err) => {
+          console.error('Error with git operations', err);
+          res.status(500).send('Error with git operations: ' + err);
+        });
+    });
   });
 });
 
@@ -61,3 +73,4 @@ app.listen(PORT, (err) => {
     console.log(`Server is running on port ${PORT}`);
   }
 });
+

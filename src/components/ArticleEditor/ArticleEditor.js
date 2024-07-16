@@ -60,10 +60,12 @@ const ArticleEditor = () => {
     const payload = {
       editorHtml: editorHtml
     };
+
     console.log('Sending data:', payload);
-    
-    axios.post('/save-data', { data: JSON.stringify(payload) })
+
+    axios.post('/save-data', payload)
       .then(response => {
+        console.log('Server response:', response.data);
         alert('Data saved and pushed to GitLab');
       })
       .catch(error => {
