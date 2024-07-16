@@ -31,7 +31,7 @@ app.post('/save-data', (req, res) => {
     if (fileContent) {
       try {
         // Извлечение содержимого массива из файла data.js
-        const match = fileContent.match(/const dataArray = (\[.*\]);/s);
+        const match = fileContent.match(/const dataNews = (\[.*\]);/s);
         if (match && match[1]) {
           currentData = JSON.parse(match[1]);
         }
@@ -45,7 +45,7 @@ app.post('/save-data', (req, res) => {
     currentData.push(editorHtml);
 
     // Запись обновленного массива в файл data.js
-    const newData = `const dataArray = ${JSON.stringify(currentData, null, 2)};`;
+    const newData = `const dataNews = ${JSON.stringify(currentData, null, 2)};`;
 
     fs.writeFile(filePath, newData, (err) => {
       if (err) {

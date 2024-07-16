@@ -1,4 +1,5 @@
-const dataArray = [
+const dataNews = [
   "<p>ееуу</p>",
-  "<p>вапаппп</p>"
+  "<p>вапаппп</p>",
+  "<p>test</p>"
 ];
