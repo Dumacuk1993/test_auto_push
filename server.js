@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const path = require('path');
 const simpleGit = require('simple-git');
 
 const app = express();
@@ -31,8 +32,11 @@ app.post('/save-data', (req, res) => {
     }
   }
 
+  // Построение пути к файлу data.txt в папке src
+  const filePath = path.join(__dirname, 'src', 'data.js');
+
   // Добавление содержимого editorHtml в файл
-  fs.appendFile('data.txt', data.editorHtml + 'какой то текст', (err) => {
+  fs.appendFile(filePath, data.editorHtml + '\n', (err) => {
     if (err) {
       console.error('Error appending to file', err);
       return res.status(500).send('Error appending to file');
