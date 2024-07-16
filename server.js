@@ -45,7 +45,9 @@ app.post('/save-data', (req, res) => {
     currentData.push(editorHtml);
 
     // Запись обновленного массива в файл data.js
-    const newData = `export default const dataNews = ${JSON.stringify(currentData, null, 2)};`;
+    const newData = `const dataNews = ${JSON.stringify(currentData, null, 2)};
+    
+    export default dataNews;`;
 
     fs.writeFile(filePath, newData, (err) => {
       if (err) {
