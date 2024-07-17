@@ -126,6 +126,9 @@ Quill.register(CustomImageBlot);
 
 const ArticleEditor = () => {
   const [editorHtml, setEditorHtml] = useState('');
+  const [title, setTitle] = useState('');
+  const [imageThumb, setImageThumb] = useState('');
+  const [selectedProduct, setSelectedProduct] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const quillRef = useRef(null);
 
@@ -138,11 +141,30 @@ const ArticleEditor = () => {
       setImageUrl('');
     }
   };
-console.log(editorHtml);
+
+  const currentDate = () => {
+    const date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    const year = date.getFullYear();
+
+    if (day < 10) {
+      day = `0${day}`;
+    }
+    if (month < 10) {
+      month = `0${month}`;
+    }
+
+    return `${day}.${month}.${year}`;
+  }
+
   const handleSave = () => {
     const payload = {
+      date: currentDate(),
       editorHtml: editorHtml,
-      logo: 'url'
+      logo: selectedProduct,
+      title, 
+      image: imageThumb
     };
 
     console.log('Sending data:', payload);
@@ -162,11 +184,22 @@ console.log(editorHtml);
     <div className='article-editor'>
       <input 
         type="text" 
-        placeholder="Введите URL изображения" 
-        value={imageUrl}
-        onChange={(e) => setImageUrl(e.target.value)}
+        placeholder="Введите Заголовок статьи" 
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
       />
-      <button onClick={handleImageInsert}>Вставить изображение</button>
+      <input 
+        type="text" 
+        placeholder="Введите URL изображения превью" 
+        value={imageThumb}
+        onChange={(e) => setImageThumb(e.target.value)}
+      />
+      <select value={selectedProduct} onChange={e => setSelectedProduct(e.target.value)}>
+        <option value="">Выберите продукт</option>
+        <option value="PAD">PAD</option>
+        <option value="SCR">SCR</option>
+        <option value="ED">ED</option>
+      </select>
       <div>
         <ReactQuill
           ref={quillRef}
@@ -174,6 +207,13 @@ console.log(editorHtml);
           onChange={setEditorHtml}
         />
       </div>
+      <input 
+        type="text" 
+        placeholder="Введите URL изображения" 
+        value={imageUrl}
+        onChange={(e) => setImageUrl(e.target.value)}
+      />
+      <button onClick={handleImageInsert}>Вставить изображение</button>
       <button onClick={handleSave}>Опубликовать статью</button>
       {dataNews?.map(item => {
         return <Article html={item.html_template} />
