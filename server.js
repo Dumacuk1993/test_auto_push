@@ -7,7 +7,7 @@ const simpleGit = require('simple-git');
 const app = express();
 const git = simpleGit();
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({}));
 
 app.post('/save-data', (req, res) => {
   const { editorHtml } = req.body;
