@@ -10,7 +10,7 @@ const git = simpleGit();
 app.use(bodyParser.json({}));
 
 app.post('/save-data', (req, res) => {
-  const { editorHtml } = req.body;
+  const { logo, editorHtml } = req.body;
 
   if (!editorHtml) {
     console.error('editorHtml is missing');
@@ -38,7 +38,7 @@ app.post('/save-data', (req, res) => {
       }
     }
 
-    currentData.push({html_template: editorHtml});
+    currentData.push({html_template: editorHtml, logo: logo});
 
     const newData = `const dataNews = ${JSON.stringify(currentData, null, 2)};
     

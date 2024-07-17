@@ -141,7 +141,8 @@ const ArticleEditor = () => {
 console.log(editorHtml);
   const handleSave = () => {
     const payload = {
-      editorHtml: editorHtml
+      editorHtml: editorHtml,
+      logo: 'url'
     };
 
     console.log('Sending data:', payload);
