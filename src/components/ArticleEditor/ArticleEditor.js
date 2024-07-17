@@ -173,6 +173,7 @@ const ArticleEditor = () => {
       .then(response => {
         console.log('Server response:', response.data);
         alert('Data saved and pushed to GitLab');
+        setEditorHtml('');
       })
       .catch(error => {
         console.error('There was an error!', error);
