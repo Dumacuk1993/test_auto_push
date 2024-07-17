@@ -174,6 +174,10 @@ const ArticleEditor = () => {
         console.log('Server response:', response.data);
         alert('Data saved and pushed to GitLab');
         setEditorHtml('');
+        setTitle('');
+        setImageThumb('');
+        setSelectedProduct('');
+        setImageUrl('');
       })
       .catch(error => {
         console.error('There was an error!', error);
