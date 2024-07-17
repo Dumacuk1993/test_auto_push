@@ -38,7 +38,7 @@ app.post('/save-data', (req, res) => {
       }
     }
 
-    currentData.push(editorHtml);
+    currentData.push({html_template: editorHtml});
 
     const newData = `const dataNews = ${JSON.stringify(currentData, null, 2)};
     
