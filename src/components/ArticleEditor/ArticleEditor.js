@@ -221,7 +221,7 @@ const ArticleEditor = () => {
       <button onClick={handleImageInsert}>Вставить изображение</button>
       <button onClick={handleSave}>Опубликовать статью</button>
       {dataNews?.map(item => {
-        return <Article html={item.html_template} />
+        return <Article item={item} />
       })}
     </div>
   );
