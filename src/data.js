@@ -23,6 +23,10 @@ const dataNews = [
   {
     "html_template": "<p>ewrewfsdf</p>",
     "logo": "url"
+  },
+  {
+    "html_template": "<p>sdfcxccxc</p>",
+    "logo": "url"
   }
 ];
     
