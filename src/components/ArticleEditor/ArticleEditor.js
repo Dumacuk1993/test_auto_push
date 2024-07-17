@@ -100,6 +100,7 @@ import 'react-quill/dist/quill.snow.css';
 import './ArticleEditor.css';
 import Article from '../Article/Article';
 import axios from 'axios';
+import dataNews from '../../data';
 
 const ImageBlot = Quill.import('formats/image');
 
@@ -173,8 +174,9 @@ console.log(editorHtml);
         />
       </div>
       <button onClick={handleSave}>Опубликовать статью</button>
-
-      <Article html={editorHtml}/>
+      {dataNews?.map(item => {
+        return <Article html={item.html_template} />
+      })}
     </div>
   );
 };
