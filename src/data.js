@@ -6,6 +6,14 @@ const dataNews = [
     "logo": "",
     "title": "",
     "image": ""
+  },
+  {
+    "id": "133cca63-bdd3-41b3-aa57-5d2ea9e64e31",
+    "html_template": "<p>dfgdgfgdfg</p>",
+    "date": "22.07.2024",
+    "logo": "",
+    "title": "dfgfdgfdg",
+    "image": ""
   }
 ];
 
