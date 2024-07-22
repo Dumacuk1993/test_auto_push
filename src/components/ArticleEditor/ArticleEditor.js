@@ -176,7 +176,10 @@ const ArticleEditor = () => {
       </div>
       <div>
         <h3 style={{ fontSize: '28px' }}>Опубликованные статьи</h3>
-        {!dataNews?.length && <p>Нет опубликованных статей</p>}
+        {!dataNews?.length && 
+          <div className='article_preview'>
+            <p>Нет опубликованных статей</p>
+          </div>}
         {dataNews?.map(item => (
           <div key={item.id} className='article_preview'>
             <Article item={item} />
