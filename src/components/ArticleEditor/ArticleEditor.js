@@ -174,15 +174,19 @@ const ArticleEditor = () => {
         <button onClick={handleImageInsert}>Вставить изображение</button>
         <button onClick={handleSave}>{editId ? 'Обновить статью' : 'Опубликовать статью'}</button>
       </div>
-      {dataNews?.map(item => (
-        <div key={item.id} className='article_preview'>
-          <Article item={item} />
-          <div className='article-buttons'>
-            <button onClick={() => handleEdit(item)}>Редактировать статью</button>
-            <button onClick={() => handleDelete(item.id)}>Удалить статью</button>
+      <div>
+        <h3 style={{ fontSize: '28px' }}>Опубликованные статьи</h3>
+        {!dataNews?.length && <p>Нет опубликованных статей</p>}
+        {dataNews?.map(item => (
+          <div key={item.id} className='article_preview'>
+            <Article item={item} />
+            <div className='article-buttons'>
+              <button onClick={() => handleEdit(item)}>Редактировать статью</button>
+              <button onClick={() => handleDelete(item.id)}>Удалить статью</button>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
