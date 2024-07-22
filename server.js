@@ -122,14 +122,14 @@ app.put('/update-data/:id', (req, res) => {
 });
 
 app.delete('/delete-data/:id', (req, res) => {
-  const id = parseInt(req.params.id, 10);
+  // const id = parseInt(req.params.id, 10);
 
   readDataFromFile((err, currentData) => {
     if (err) {
       return res.status(500).send('Error reading file');
     }
 
-    const newData = currentData.filter(item => item.id !== id);
+    const newData = currentData.filter(item => item.id !== req.params.id);
 
     if (newData.length === currentData.length) {
       return res.status(404).send('Data not found');
