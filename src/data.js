@@ -1,11 +1,11 @@
 const dataNews = [
   {
-    "id": 1721635600820,
-    "html_template": "<p><img src=\"https://img1.akspic.ru/attachments/crops/1/4/9/1/3/131941/131941-banff-park-pustynya-nacionalnyj_park-gornyj_relef-2560x1440.jpg\"></p><p>Абзац1</p><p>Абзац2</p><p><br></p><h2>Подзаголовок 1</h2><p>Абзац 3</p><p><br></p>",
+    "id": "fa063028-20ac-4815-8687-1fed0b6172ca",
+    "html_template": "<p>dfgdgdfgfdg</p>",
     "date": "22.07.2024",
     "logo": "",
-    "title": "Заголов статьи 1",
-    "image": "https://img1.akspic.ru/attachments/crops/1/4/9/1/3/131941/131941-banff-park-pustynya-nacionalnyj_park-gornyj_relef-2560x1440.jpg"
+    "title": "",
+    "image": ""
   }
 ];
 
