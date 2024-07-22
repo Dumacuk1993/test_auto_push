@@ -1,7 +1,9 @@
 .article {
     width: 700px;
     margin: 0 auto;
-    padding-top: 32px;
+    padding: 32px;
+    margin-top: 32px;
+    border: 1px solid #999898;
 }
 .article img {
     display: block;
