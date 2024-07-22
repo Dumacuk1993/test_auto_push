@@ -89,7 +89,6 @@ app.post('/save-data', (req, res) => {
 });
 
 app.put('/update-data/:id', (req, res) => {
-  const id = parseInt(req.params.id, 10);
   const { date, logo, editorHtml, title, image } = req.body;
 
   readDataFromFile((err, currentData) => {
@@ -97,13 +96,13 @@ app.put('/update-data/:id', (req, res) => {
       return res.status(500).send('Error reading file');
     }
 
-    const index = currentData.findIndex(item => item.id === id);
+    const index = currentData.findIndex(item => item.id === req.params.id);
     if (index === -1) {
       return res.status(404).send('Data not found');
     }
 
     currentData[index] = {
-      id,
+      id: req.params.id,
       html_template: editorHtml, 
       date,
       logo,
@@ -122,7 +121,6 @@ app.put('/update-data/:id', (req, res) => {
 });
 
 app.delete('/delete-data/:id', (req, res) => {
-  // const id = parseInt(req.params.id, 10);
 
   readDataFromFile((err, currentData) => {
     if (err) {
