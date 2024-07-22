@@ -132,6 +132,7 @@ const ArticleEditor = () => {
     setSelectedProduct('');
     setImageUrl('');
     setEditId(null);
+    setOpenEditor(false)
   };
 
   return (
