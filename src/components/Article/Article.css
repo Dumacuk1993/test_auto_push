@@ -1,13 +1,11 @@
 .article {
-    width: 700px;
+    width: 70vw;
     margin: 0 auto;
-    padding: 32px;
-    margin-top: 32px;
-    border: 1px solid #999898;
+
 }
 .article img {
     display: block;
-    width: 700px;
+    width: 900px;
     height: auto;
 }
 .article p {

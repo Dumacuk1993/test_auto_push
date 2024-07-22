@@ -12,4 +12,15 @@ code {
     monospace;
 }
 
+button {
+  cursor: pointer;
+  padding: 16px;
+  background-color: #107f8c;
+  color: #fff;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 500;
+  border: none;
+}
+
 

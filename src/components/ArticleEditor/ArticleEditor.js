@@ -35,7 +35,8 @@ const ArticleEditor = () => {
   const [imageThumb, setImageThumb] = useState('');
   const [selectedProduct, setSelectedProduct] = useState('');
   const [imageUrl, setImageUrl] = useState('');
-  const [editId, setEditId] = useState(null); // для хранения id редактируемой статьи
+  const [editId, setEditId] = useState(null);
+  const [openEditor, setOpenEditor] = useState(false);
   const quillRef = useRef(null);
 
   const handleImageInsert = () => {
@@ -106,6 +107,7 @@ const ArticleEditor = () => {
     setImageThumb(article.image);
     setSelectedProduct(article.logo);
     setEditId(article.id);
+    setOpenEditor(true)
   };
 
   const handleDelete = (id) => {
@@ -134,44 +136,50 @@ const ArticleEditor = () => {
 
   return (
     <div className='article-editor'>
-      <input 
-        type="text" 
-        placeholder="Введите Заголовок статьи" 
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <input 
-        type="text" 
-        placeholder="Введите URL изображения превью" 
-        value={imageThumb}
-        onChange={(e) => setImageThumb(e.target.value)}
-      />
-      <select value={selectedProduct} onChange={e => setSelectedProduct(e.target.value)}>
-        <option value="">Выберите продукт</option>
-        <option value="PAD">PAD</option>
-        <option value="SCR">SCR</option>
-        <option value="ED">ED</option>
-      </select>
-      <div>
-        <ReactQuill
-          ref={quillRef}
-          value={editorHtml}
-          onChange={setEditorHtml}
+      <button onClick={() => setOpenEditor(!openEditor)}>Добавить статью</button>
+      <div className='article-editor-wrapper' style={{ display: openEditor ? 'block' : 'none' }}>
+        <h1 className='new_article-title'>{editId ? 'Редактирование статьи' : 'Новая статья'}</h1>
+        <input 
+          type="text" 
+          placeholder="Введите Заголовок статьи" 
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
+        <input 
+          type="text" 
+          placeholder="Введите URL изображения превью" 
+          value={imageThumb}
+          onChange={(e) => setImageThumb(e.target.value)}
+        />
+        <select value={selectedProduct} onChange={e => setSelectedProduct(e.target.value)}>
+          <option value="">Выберите продукт</option>
+          <option value="PAD">PAD</option>
+          <option value="SCR">SCR</option>
+          <option value="ED">ED</option>
+        </select>
+        <div>
+          <ReactQuill
+            ref={quillRef}
+            value={editorHtml}
+            onChange={setEditorHtml}
+          />
+        </div>
+        <input 
+          type="text" 
+          placeholder="Введите URL изображения" 
+          value={imageUrl}
+          onChange={(e) => setImageUrl(e.target.value)}
+        />
+        <button onClick={handleImageInsert}>Вставить изображение</button>
+        <button onClick={handleSave}>{editId ? 'Обновить статью' : 'Опубликовать статью'}</button>
       </div>
-      <input 
-        type="text" 
-        placeholder="Введите URL изображения" 
-        value={imageUrl}
-        onChange={(e) => setImageUrl(e.target.value)}
-      />
-      <button onClick={handleImageInsert}>Вставить изображение</button>
-      <button onClick={handleSave}>{editId ? 'Обновить статью' : 'Опубликовать статью'}</button>
       {dataNews?.map(item => (
-        <div key={item.id}>
+        <div key={item.id} className='article_preview'>
           <Article item={item} />
-          <button onClick={() => handleEdit(item)}>Редактировать</button>
-          <button onClick={() => handleDelete(item.id)}>Удалить</button>
+          <div className='article-buttons'>
+            <button onClick={() => handleEdit(item)}>Редактировать статью</button>
+            <button onClick={() => handleDelete(item.id)}>Удалить статью</button>
+          </div>
         </div>
       ))}
     </div>
