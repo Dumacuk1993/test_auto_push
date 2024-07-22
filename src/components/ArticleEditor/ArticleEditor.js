@@ -1,98 +1,3 @@
-// import React, { useState, useRef } from 'react';
-// import ReactQuill from 'react-quill';
-// import Quill from 'quill';
-// import 'react-quill/dist/quill.snow.css';
-// import './ArticleEditor.css';
-// import Article from '../Article/Article';
-// import axios from 'axios';
-
-// const ImageBlot = Quill.import('formats/image');
-
-// class CustomImageBlot extends ImageBlot {
-//   static create(value) {
-//     const node = super.create(value);
-//     node.setAttribute('src', value.url);
-//     node.setAttribute('alt', value.alt || '');
-//     return node;
-//   }
-
-//   static value(node) {
-//     return {
-//       url: node.getAttribute('src'),
-//       alt: node.getAttribute('alt'),
-//     };
-//   }
-// }
-
-// CustomImageBlot.blotName = 'image';
-// CustomImageBlot.tagName = 'img';
-// Quill.register(CustomImageBlot);
-
-// const ArticleEditor = () => {
-//   const [editorHtml, setEditorHtml] = useState('');
-//   const quillRef = useRef(null);
-
-//   const handleImageUpload = () => {
-//     const input = document.createElement('input');
-//     input.setAttribute('type', 'file');
-//     input.setAttribute('accept', 'image/*');
-//     input.click();
-
-//     input.onchange = async () => {
-//       const file = input.files[0];
-//       const reader = new FileReader();
-
-//       reader.onload = (e) => {
-//         const quill = quillRef.current.getEditor();
-//         const range = quill.getSelection();
-        
-//         if (range) {
-//           const url = e.target.result;
-//           quill.insertEmbed(range.index, 'image', { url });
-//         }
-//       };
-
-//       reader.readAsDataURL(file);
-//     };
-//   };
-
-//   const handleSave = () => {
-//     const payload = {
-//       editorHtml: editorHtml
-//     };
-
-//     console.log('Sending data:', payload);
-
-//     axios.post('/save-data', payload)
-//       .then(response => {
-//         console.log('Server response:', response.data);
-//         alert('Data saved and pushed to GitLab');
-//       })
-//       .catch(error => {
-//         console.error('There was an error!', error);
-//         alert('There was an error: ' + error.message);
-//       });
-//   };
-
-//   return (
-//     <div className='article-editor'>
-//       <button onClick={handleImageUpload}>Загрузить изображение</button>
-//       <div>
-//         <ReactQuill
-//           ref={quillRef}
-//           value={editorHtml}
-//           onChange={setEditorHtml}
-//         />
-//       </div>
-//       <button onClick={handleSave}>Опубликовать статью</button>
-
-//       <Article html={editorHtml}/>
-//     </div>
-//   );
-// };
-
-// export default ArticleEditor;
-
 import React, { useState, useRef } from 'react';
 import ReactQuill from 'react-quill';
 import Quill from 'quill';
@@ -130,6 +35,7 @@ const ArticleEditor = () => {
   const [imageThumb, setImageThumb] = useState('');
   const [selectedProduct, setSelectedProduct] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [editId, setEditId] = useState(null); // для хранения id редактируемой статьи
   const quillRef = useRef(null);
 
   const handleImageInsert = () => {
@@ -167,22 +73,63 @@ const ArticleEditor = () => {
       image: imageThumb
     };
 
-    console.log('Sending data:', payload);
+    if (editId) {
+      // Обновление статьи
+      axios.put(`/update-data/${editId}`, payload)
+        .then(response => {
+          console.log('Server response:', response.data);
+          alert('Data updated and pushed to GitHub');
+          clearForm();
+        })
+        .catch(error => {
+          console.error('There was an error!', error);
+          alert('There was an error: ' + error.message);
+        });
+    } else {
+      // Сохранение новой статьи
+      axios.post('/save-data', payload)
+        .then(response => {
+          console.log('Server response:', response.data);
+          alert('Data saved and pushed to GitHub');
+          clearForm();
+        })
+        .catch(error => {
+          console.error('There was an error!', error);
+          alert('There was an error: ' + error.message);
+        });
+    }
+  };
 
-    axios.post('/save-data', payload)
-      .then(response => {
-        console.log('Server response:', response.data);
-        alert('Data saved and pushed to GitLab');
-        setEditorHtml('');
-        setTitle('');
-        setImageThumb('');
-        setSelectedProduct('');
-        setImageUrl('');
-      })
-      .catch(error => {
-        console.error('There was an error!', error);
-        alert('There was an error: ' + error.message);
-      });
+  const handleEdit = (article) => {
+    setEditorHtml(article.html_template);
+    setTitle(article.title);
+    setImageThumb(article.image);
+    setSelectedProduct(article.logo);
+    setEditId(article.id);
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm('Вы уверены, что хотите удалить эту статью?')) {
+      axios.delete(`/delete-data/${id}`)
+        .then(response => {
+          console.log('Server response:', response.data);
+          alert('Data deleted and pushed to GitHub');
+          clearForm();
+        })
+        .catch(error => {
+          console.error('There was an error!', error);
+          alert('There was an error: ' + error.message);
+        });
+    }
+  };
+
+  const clearForm = () => {
+    setEditorHtml('');
+    setTitle('');
+    setImageThumb('');
+    setSelectedProduct('');
+    setImageUrl('');
+    setEditId(null);
   };
 
   return (
@@ -219,12 +166,152 @@ const ArticleEditor = () => {
         onChange={(e) => setImageUrl(e.target.value)}
       />
       <button onClick={handleImageInsert}>Вставить изображение</button>
-      <button onClick={handleSave}>Опубликовать статью</button>
-      {dataNews?.map(item => {
-        return <Article item={item} />
-      })}
+      <button onClick={handleSave}>{editId ? 'Обновить статью' : 'Опубликовать статью'}</button>
+      {dataNews?.map(item => (
+        <div key={item.id}>
+          <Article item={item} />
+          <button onClick={() => handleEdit(item)}>Редактировать</button>
+          <button onClick={() => handleDelete(item.id)}>Удалить</button>
+        </div>
+      ))}
     </div>
   );
 };
 
 export default ArticleEditor;
+
+// import React, { useState, useRef } from 'react';
+// import ReactQuill from 'react-quill';
+// import Quill from 'quill';
+// import 'react-quill/dist/quill.snow.css';
+// import './ArticleEditor.css';
+// import Article from '../Article/Article';
+// import axios from 'axios';
+// import dataNews from '../../data';
+
+// const ImageBlot = Quill.import('formats/image');
+
+// class CustomImageBlot extends ImageBlot {
+//   static create(value) {
+//     const node = super.create(value);
+//     node.setAttribute('src', value.url);
+//     node.setAttribute('alt', value.alt || '');
+//     return node;
+//   }
+
+//   static value(node) {
+//     return {
+//       url: node.getAttribute('src'),
+//       alt: node.getAttribute('alt'),
+//     };
+//   }
+// }
+
+// CustomImageBlot.blotName = 'image';
+// CustomImageBlot.tagName = 'img';
+// Quill.register(CustomImageBlot);
+
+// const ArticleEditor = () => {
+//   const [editorHtml, setEditorHtml] = useState('');
+//   const [title, setTitle] = useState('');
+//   const [imageThumb, setImageThumb] = useState('');
+//   const [selectedProduct, setSelectedProduct] = useState('');
+//   const [imageUrl, setImageUrl] = useState('');
+//   const quillRef = useRef(null);
+
+//   const handleImageInsert = () => {
+//     const quill = quillRef.current.getEditor();
+//     const range = quill.getSelection();
+    
+//     if (range && imageUrl) {
+//       quill.insertEmbed(range.index, 'image', { url: imageUrl });
+//       setImageUrl('');
+//     }
+//   };
+
+//   const currentDate = () => {
+//     const date = new Date();
+//     let day = date.getDate();
+//     let month = date.getMonth() + 1;
+//     const year = date.getFullYear();
+
+//     if (day < 10) {
+//       day = `0${day}`;
+//     }
+//     if (month < 10) {
+//       month = `0${month}`;
+//     }
+
+//     return `${day}.${month}.${year}`;
+//   }
+
+//   const handleSave = () => {
+//     const payload = {
+//       date: currentDate(),
+//       editorHtml: editorHtml,
+//       logo: selectedProduct,
+//       title, 
+//       image: imageThumb
+//     };
+
+//     console.log('Sending data:', payload);
+
+//     axios.post('/save-data', payload)
+//       .then(response => {
+//         console.log('Server response:', response.data);
+//         alert('Data saved and pushed to GitLab');
+//         setEditorHtml('');
+//         setTitle('');
+//         setImageThumb('');
+//         setSelectedProduct('');
+//         setImageUrl('');
+//       })
+//       .catch(error => {
+//         console.error('There was an error!', error);
+//         alert('There was an error: ' + error.message);
+//       });
+//   };
+
+//   return (
+//     <div className='article-editor'>
+//       <input 
+//         type="text" 
+//         placeholder="Введите Заголовок статьи" 
+//         value={title}
+//         onChange={(e) => setTitle(e.target.value)}
+//       />
+//       <input 
+//         type="text" 
+//         placeholder="Введите URL изображения превью" 
+//         value={imageThumb}
+//         onChange={(e) => setImageThumb(e.target.value)}
+//       />
+//       <select value={selectedProduct} onChange={e => setSelectedProduct(e.target.value)}>
+//         <option value="">Выберите продукт</option>
+//         <option value="PAD">PAD</option>
+//         <option value="SCR">SCR</option>
+//         <option value="ED">ED</option>
+//       </select>
+//       <div>
+//         <ReactQuill
+//           ref={quillRef}
+//           value={editorHtml}
+//           onChange={setEditorHtml}
+//         />
+//       </div>
+//       <input 
+//         type="text" 
+//         placeholder="Введите URL изображения" 
+//         value={imageUrl}
+//         onChange={(e) => setImageUrl(e.target.value)}
+//       />
+//       <button onClick={handleImageInsert}>Вставить изображение</button>
+//       <button onClick={handleSave}>Опубликовать статью</button>
+//       {dataNews?.map(item => {
+//         return <Article item={item} />
+//       })}
+//     </div>
+//   );
+// };
+
+// export default ArticleEditor;
