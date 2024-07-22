@@ -175,11 +175,11 @@ const ArticleEditor = () => {
         <button onClick={handleSave}>{editId ? 'Обновить статью' : 'Опубликовать статью'}</button>
       </div>
       <div>
-        <h3 style={{ fontSize: '28px' }}>Опубликованные статьи</h3>
-        {!dataNews?.length && 
+        <h3 style={{ fontSize: '28px' }}>{!dataNews?.length ? 'Нет опубликованных статей' : 'Опубликованные статьи'}</h3>
+        {/* {!dataNews?.length && 
           <div className='article_preview'>
             <p>Нет опубликованных статей</p>
-          </div>}
+          </div>} */}
         {dataNews?.map(item => (
           <div key={item.id} className='article_preview'>
             <Article item={item} />
