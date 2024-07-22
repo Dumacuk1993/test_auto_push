@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
 const simpleGit = require('simple-git');
+const { v4: uuidv4 } = require('uuid');
 
 const app = express();
 const git = simpleGit();
@@ -69,7 +70,7 @@ app.post('/save-data', (req, res) => {
     }
 
     currentData.push({
-      id: Date.now(), // добавляем уникальный идентификатор
+      id: uuidv4(), 
       html_template: editorHtml, 
       date,
       logo,
