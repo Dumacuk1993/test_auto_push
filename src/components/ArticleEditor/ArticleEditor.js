@@ -140,24 +140,26 @@ const ArticleEditor = () => {
       <button onClick={() => setOpenEditor(!openEditor)}>Добавить статью</button>
       <div className='article-editor-wrapper' style={{ display: openEditor ? 'block' : 'none' }}>
         <h1 className='new_article-title'>{editId ? 'Редактирование статьи' : 'Новая статья'}</h1>
-        <input 
-          type="text" 
-          placeholder="Введите Заголовок статьи" 
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <input 
-          type="text" 
-          placeholder="Введите URL изображения превью" 
-          value={imageThumb}
-          onChange={(e) => setImageThumb(e.target.value)}
-        />
-        <select value={selectedProduct} onChange={e => setSelectedProduct(e.target.value)}>
-          <option value="">Выберите продукт</option>
-          <option value="PAD">PAD</option>
-          <option value="SCR">SCR</option>
-          <option value="ED">ED</option>
-        </select>
+        <div className='article-editor-inputs'>
+          <input 
+            type="text" 
+            placeholder="Введите Заголовок статьи" 
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <input 
+            type="text" 
+            placeholder="Введите URL изображения превью" 
+            value={imageThumb}
+            onChange={(e) => setImageThumb(e.target.value)}
+          />
+          <select value={selectedProduct} onChange={e => setSelectedProduct(e.target.value)}>
+            <option value="">Выберите продукт</option>
+            <option value="PAD">PAD</option>
+            <option value="SCR">SCR</option>
+            <option value="ED">ED</option>
+          </select>
+        </div>
         <div>
           <ReactQuill
             ref={quillRef}
@@ -165,13 +167,16 @@ const ArticleEditor = () => {
             onChange={setEditorHtml}
           />
         </div>
-        <input 
-          type="text" 
-          placeholder="Введите URL изображения" 
-          value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
-        />
-        <button onClick={handleImageInsert}>Вставить изображение</button>
+        <div className='add_img-in_article'>
+          <input 
+            type="text"
+            className='article-editor-input-image' 
+            placeholder="Введите URL изображения" 
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+          />
+          <button onClick={handleImageInsert}>Вставить изображение</button>
+        </div>
         <button onClick={handleSave}>{editId ? 'Обновить статью' : 'Опубликовать статью'}</button>
       </div>
       <div>

@@ -12,8 +12,43 @@
     border: 1px solid #979696;
     padding: 32px;
 }
+.article-editor-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+input {
+    padding: 8px;
+    border: 1px solid #979696;
+    border-radius: 8px;
+    width: 100%;
+    font-size: 18px;
+}
+.article-editor-input-image {
+    margin: 16px 0;
+    width: 80%;
+    flex-grow: 1;
+}
+.article-editor-inputs select {
+    padding: 8px;
+    border: 1px solid #979696;
+    border-radius: 8px;
+    width: 260px;
+    font-size: 18px;
+}
+.add_img-in_article {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+}
+.add_img-in_article button {
+    width: 300px;
+    padding: 8px;
+}
 .quill {
-    width: 70vw;
+    width: 100%;
     margin: 0 auto;
 } 
 .ql-editor {
