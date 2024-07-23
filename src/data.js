@@ -1,7 +1,7 @@
 const dataNews = [
   {
     "id": "983bd4db-4686-4eae-b681-6224027061a1",
-    "html_template": "<p>fsdgdfgdfgdgfdg</p>",
+    "html_template": "<p>fsdgdfgdfgdgfdg</p><p>fgjfjfj</p>",
     "date": "23.07.2024",
     "logo": "",
     "title": "",
