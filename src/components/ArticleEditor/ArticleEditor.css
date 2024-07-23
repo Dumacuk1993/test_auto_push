@@ -61,3 +61,12 @@ input {
     border: 1px solid #979696;
     width: 70vw;
 }
+.article-buttons button + button {
+    margin-left: 16px;
+}
+.delete {
+    background-color: #D0021B;
+}
+.edit {
+    background-color: #4BBD5C;
+}
